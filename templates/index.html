@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brainlox Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            text-align: center;
+        }
+
+        h1 {
+            color: #007BFF;
+            font-size: 28px;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        /* Loader Animation */
+        .loader {
+            display: none;
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #007BFF;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Course Container */
+        .course-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        /* Course Cards */
+        .course-card {
+            background: white;
+            padding: 15px;
+            margin: 15px;
+            border-radius: 8px;
+            box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.15);
+            width: 320px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .course-card:hover {
+            transform: scale(1.05);
+        }
+
+        .course-card h3 {
+            margin-top: 0;
+            color: #007BFF;
+        }
+
+        .course-card p {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .course-card a {
+            text-decoration: none;
+            color: white;
+            background-color: #007BFF;
+            padding: 8px 15px;
+            border-radius: 5px;
+            display: inline-block;
+            transition: background-color 0.3s;
+        }
+
+        .course-card a:hover {
+            background-color: #0056b3;
+        }
+
+        /* Download Section */
+        .download-section {
+            margin-top: 30px;
+        }
+
+        .download-btn {
+            background-color: #28a745;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .download-btn:hover {
+            background-color: #218838;
+        }
+
+        /* Typing Indicator */
+        .typing-indicator {
+            display: none;
+            font-size: 16px;
+            color: #555;
+            font-style: italic;
+        }
+    </style>
+    <script>
+        function showLoading() {
+            document.getElementById('loader').style.display = "block";
+        }
+
+        function showTyping() {
+            document.getElementById('typing-indicator').style.display = "block";
+        }
+    </script>
+</head>
+<body>
+
+    <h1>🤖 Brainlox Chatbot - Course Extractor</h1>
+
+    <!-- Loader -->
+    <div id="loader" class="loader"></div>
+
+    <h2>📚 Available Courses</h2>
+    <div class="course-container">
+        {% for course in courses %}
+        <div class="course-card">
+            <h3>{{ course.title }}</h3>
+            <p>{{ course.description }}</p>
+            <a href="{{ course.link }}" target="_blank">View Course</a>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="download-section">
+        <h2>📄 Download Course Summary as PDF</h2>
+
+        <!-- Typing Indicator -->
+        <div id="typing-indicator" class="typing-indicator">Generating PDF, please wait...</div>
+
+        <form action="/generate_pdf" method="get" onsubmit="showLoading(); showTyping();">
+            <input type="text" name="question" placeholder="Enter query (optional)">
+            <button type="submit" class="download-btn">📥 Generate & Download PDF</button>
+        </form>
+    </div>
+
+</body>
+</html>
