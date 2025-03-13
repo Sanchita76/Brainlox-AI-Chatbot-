@@ -2,7 +2,7 @@
 <div align="center">Smart AI chatbot and PDF generator for course insights & quick learning!</div>
   <br>
   <p align="center">
-    <img src="ss/abcd.jpg" alt="Brainlox AI Chatbot" width="170" height="80">
+    <img src="ss/abcd(1).jpg" alt="Brainlox AI Chatbot" width="170" height="80">
   </p>
 
  ## 📝 Overview
