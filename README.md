@@ -14,7 +14,7 @@ This chatbot uses **LangChain, FAISS, and Flask RESTful API** to provide a fast,
 
 ## Try it Out 
 
-**[Visit Site]()**
+**[Visit Site](https://brainlox.vercel.app/)**
 
 ## ✨ Key Features
 ✅ AI-Powered Chatbot – Understands user queries and retrieves accurate course information.<br>
