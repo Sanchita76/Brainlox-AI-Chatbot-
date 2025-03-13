@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brainlox AI Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .chat-container {
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            max-height: 400px;
+        }
+        .message {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            word-wrap: break-word;
+            display: inline-block;
+            max-width: 80%;
+        }
+        .user {
+            background-color: #007bff;
+            color: white;
+            text-align: right;
+            float: right;
+            clear: both;
+        }
+        .bot {
+            background-color: #ddd;
+            color: black;
+            text-align: left;
+            float: left;
+            clear: both;
+        }
+        .input-container {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+        }
+        input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            padding: 10px 15px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+        button:disabled {
+            background: #aaa;
+            cursor: not-allowed;
+        }
+        /* Loading animation */
+        .typing-indicator {
+            display: none;
+            justify-content: left;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background: #999;
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: typing 1.5s infinite;
+        }
+        .typing-indicator span:nth-child(1) {
+            animation-delay: 0s;
+        }
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        @keyframes typing {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <h1>Brainlox AI Chatbot</h1>
+    <div class="chat-container" id="chat-container"></div>
+
+    <div class="input-container">
+        <input type="text" id="question" placeholder="Ask about a Brainlox course..." onkeypress="handleKeyPress(event)">
+        <button id="ask-btn" onclick="askQuestion()">Ask</button>
+    </div>
+
+    <div class="typing-indicator" id="typing-indicator">
+        <span></span><span></span><span></span>
+    </div>
+
+    <script>
+        function handleKeyPress(event) {
+            if (event.key === "Enter") {
+                askQuestion();
+            }
+        }
+
+        function askQuestion() {
+            let questionInput = document.getElementById("question");
+            let question = questionInput.value.trim();
+            if (!question) return;
+
+            let chatContainer = document.getElementById("chat-container");
+            let typingIndicator = document.getElementById("typing-indicator");
+            let askButton = document.getElementById("ask-btn");
+
+            // Display user message
+            chatContainer.innerHTML += `<div class="message user">${question}</div>`;
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            // Clear input
+            questionInput.value = "";
+            questionInput.disabled = true;
+            askButton.disabled = true;
+
+            // Show typing indicator
+            typingIndicator.style.display = "flex";
+
+            fetch("/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ question: question })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Hide typing indicator
+                typingIndicator.style.display = "none";
+
+                // Display bot response
+                let reply = data.response || "Sorry, I couldn't fetch a response.";
+                chatContainer.innerHTML += `<div class="message bot">${reply}</div>`;
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+
+                // Enable input
+                questionInput.disabled = false;
+                askButton.disabled = false;
+                questionInput.focus();
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                typingIndicator.style.display = "none";
+                chatContainer.innerHTML += `<div class="message bot">⚠️ Error fetching response. Please try again.</div>`;
+                questionInput.disabled = false;
+                askButton.disabled = false;
+            });
+        }
+    </script>
+</body>
+</html>
